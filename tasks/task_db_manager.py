@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 
 def _start_database():
-    conn = sqlite3.connect("database/data.db")
+    conn = sqlite3.connect(r".\data.db")
     cursor = conn.cursor()
 
     _create_table_if_not_exists(cursor)

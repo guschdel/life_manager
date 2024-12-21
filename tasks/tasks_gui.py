@@ -1,6 +1,6 @@
 from datetime import date
 import customtkinter 
-from task_db_manager import return_tasks, create_new_task, delete_task
+from tasks.task_db_manager import return_tasks, create_new_task, delete_task
 
 
 class Task(customtkinter.CTkFrame):
@@ -130,9 +130,9 @@ class GUI(customtkinter.CTk):
             self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
 
-def run_tasks():
+def run_tasks_gui():
     gui = GUI()
     gui.mainloop()
 
 if __name__ == "__main__":
-    run_tasks()
+    run_tasks_gui()
