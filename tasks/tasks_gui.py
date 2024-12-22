@@ -3,7 +3,7 @@ import customtkinter
 from tasks.task_db_manager import return_tasks, create_new_task, delete_task
 
 from shop.shop_manager import add_to_currency
-
+from main_gui.main_gui import run_main_gui
 
 class Task(customtkinter.CTkFrame):
     def __init__(self, master, objective, creation_date, limit_date, coin_reward):
@@ -136,7 +136,7 @@ class GUI(customtkinter.CTk):
         self.legend_frame = LegendFrame(self)
         self.legend_frame.grid(row=1, column=1, sticky="sew", pady=(15,0), padx=10)
 
-        self.shop_button = customtkinter.CTkButton(self, text="Go to shop", command=self.open_shop_gui)
+        self.shop_button = customtkinter.CTkButton(self, text="Go back", command=self.open_main_gui)
         self.shop_button.grid(row=2, column=1, sticky="sew", pady=15, padx=10)
 
 
@@ -146,10 +146,9 @@ class GUI(customtkinter.CTk):
         self.scrollable_frame.initialize_tasks()
         self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
-    def open_shop_gui(self):
-        from shop.shop_gui import run_shop_gui
+    def open_main_gui(self):
         self.destroy()
-        run_shop_gui()
+        run_main_gui()
     
 
 def run_tasks_gui():

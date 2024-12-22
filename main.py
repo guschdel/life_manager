@@ -1,3 +1,3 @@
-from tasks.tasks_gui import run_tasks_gui
+from main_gui.main_gui import run_main_gui
 
-run_tasks_gui()
+run_main_gui()

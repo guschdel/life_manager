@@ -3,7 +3,7 @@ import os
 import sys
 
 from shop.shop_manager import add_to_currency, add_product, return_products, return_currency
-from tasks.tasks_gui import run_tasks_gui
+from main_gui.main_gui import run_main_gui
 
 class Product(customtkinter.CTkFrame):
     def __init__(self, master, product_name, price):
@@ -74,7 +74,7 @@ class InputFrame(customtkinter.CTkFrame):
         self.price_label = customtkinter.CTkLabel(self, text="How much does it cost?")
         self.product_input = customtkinter.CTkEntry(self)
         self.price_input = customtkinter.CTkEntry(self)
-        self.input_button = customtkinter.CTkButton(self, text="Create task", command=self.create_product)
+        self.input_button = customtkinter.CTkButton(self, text="Create product", command=self.create_product)
         
         self.product_label.grid(row=0, column=0, padx=(10,0), sticky="w")
         self.price_label.grid(row=1, column=0, padx=(10,0), sticky="w")
@@ -114,7 +114,7 @@ class GUI(customtkinter.CTk):
         self.money_frame = MoneyFrame(self)
         self.money_frame.grid(row=1, column=1, sticky="sew", pady=(15, 0), padx=10)
 
-        self.tasks_button = customtkinter.CTkButton(self, text="Go to tasks", command=self.open_tasks_gui)
+        self.tasks_button = customtkinter.CTkButton(self, text="Go back", command=self.open_main_gui)
         self.tasks_button.grid(row=2, column=1, sticky="sew", pady=(5, 15), padx=10)
     
     def update_products(self):
@@ -122,10 +122,9 @@ class GUI(customtkinter.CTk):
             self.scrollable_frame = ScrollableFrame(self)
             self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
-    def open_tasks_gui(self):
-        from tasks.tasks_gui import run_tasks_gui
+    def open_main_gui(self):
         self.destroy()
-        run_tasks_gui()
+        run_main_gui()
 
 def run_shop_gui():
     gui = GUI()
