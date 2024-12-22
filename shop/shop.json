@@ -1,4 +1,9 @@
 {
-  "currency": 50,
-  "products": []
+    "currency": 100009,
+    "products": [
+        [
+            "Watch a movie",
+            10
+        ]
+    ]
 }
