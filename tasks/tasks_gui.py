@@ -1,14 +1,18 @@
 from datetime import date
 import customtkinter 
 from tasks.task_db_manager import return_tasks, create_new_task, delete_task
+import os 
+import sys
 
+from shop.shop_manager import add_to_currency
 
 class Task(customtkinter.CTkFrame):
-    def __init__(self, master, objective, creation_date, limit_date):
+    def __init__(self, master, objective, creation_date, limit_date, coin_reward):
         self.objective = objective
         self.creation_date = creation_date
         self.limit_date = limit_date    
         self.scrollable_frame = master
+        self.coin_reward = coin_reward
 
         today = date.today()
         limit_day, limit_month, limit_year = limit_date.split()[0].split("/")
@@ -32,8 +36,9 @@ class Task(customtkinter.CTkFrame):
         self.complete_button.grid(row=0, column=1, pady=(10,5), padx=10, sticky="w")
 
     def delete_task_and_update(self):
-        delete_task(self.objective, self.creation_date, self.limit_date)
+        delete_task(self.objective, self.creation_date, self.limit_date, self.coin_reward)
         self.scrollable_frame.gui_window.update_tasks()
+        add_to_currency(self.coin_reward)
 
 class ScrollableFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master):
@@ -50,8 +55,9 @@ class ScrollableFrame(customtkinter.CTkScrollableFrame):
         objective = task[0]
         creation_date = task[1]
         limit_date = task[2]
+        coin_reward = task[3]
 
-        new_task = Task(self, objective, creation_date, limit_date)
+        new_task = Task(self, objective, creation_date, limit_date, coin_reward)
         new_task.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
 
 class InputFrame(customtkinter.CTkFrame):
@@ -63,27 +69,34 @@ class InputFrame(customtkinter.CTkFrame):
 
         self.objective_label = customtkinter.CTkLabel(self, text="What's the objective of the task?")
         self.days_label = customtkinter.CTkLabel(self, text="How many days do you have to do it?")
+        self.coin_reward_label = customtkinter.CTkLabel(self, text="How many coins does it give you?")
         self.objective_input = customtkinter.CTkEntry(self)
         self.days_input = customtkinter.CTkEntry(self)
+        self.coin_reward_input = customtkinter.CTkEntry(self)
         self.input_button = customtkinter.CTkButton(self, text="Create task", command=self.input_task)
         
         self.objective_label.grid(row=0, column=0, padx=(10,0), sticky="w")
         self.days_label.grid(row=1, column=0, padx=(10,0), sticky="w")
+        self.coin_reward_label.grid(row=2, column=0, padx=(10,0), sticky="w")
         self.objective_input.grid(row=0, column=1, sticky="ew", padx = 10)
         self.days_input.grid(row=1, column=1, sticky="ew", padx = 10)
+        self.coin_reward_input.grid(row=2, column=1, sticky="ew", padx = 10)
         self.input_button.grid(row=1, column=2, padx=(0,10))
 
     def input_task(self):
         objective = self.objective_input.get().strip()
         days = self.days_input.get().strip()
+        coin_reward = self.coin_reward_input.get().strip()
 
+        if not coin_reward:
+            coin_reward = 0
         try:
             days = int(days)
         except:
             days = None
 
         if objective and days:
-            create_new_task(objective, days)
+            create_new_task(objective, days, coin_reward)
             self.gui_window.update_tasks()
     
 class LegendFrame(customtkinter.CTkFrame):
