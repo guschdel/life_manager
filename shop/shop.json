@@ -1,9 +1,13 @@
 {
-    "currency": 100009,
+    "currency": 155299,
     "products": [
         [
             "Watch a movie",
             10
+        ],
+        [
+            "1 hour free time",
+            20
         ]
     ]
 }

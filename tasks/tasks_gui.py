@@ -1,10 +1,9 @@
 from datetime import date
 import customtkinter 
 from tasks.task_db_manager import return_tasks, create_new_task, delete_task
-import os 
-import sys
 
 from shop.shop_manager import add_to_currency
+
 
 class Task(customtkinter.CTkFrame):
     def __init__(self, master, objective, creation_date, limit_date, coin_reward):
@@ -81,7 +80,7 @@ class InputFrame(customtkinter.CTkFrame):
         self.objective_input.grid(row=0, column=1, sticky="ew", padx = 10)
         self.days_input.grid(row=1, column=1, sticky="ew", padx = 10)
         self.coin_reward_input.grid(row=2, column=1, sticky="ew", padx = 10)
-        self.input_button.grid(row=1, column=2, padx=(0,10))
+        self.input_button.grid(row=1, column=2, padx=(0,10), rowspan=3)
 
     def input_task(self):
         objective = self.objective_input.get().strip()
@@ -132,20 +131,29 @@ class GUI(customtkinter.CTk):
         self.update_tasks()
 
         self.input_frame = InputFrame(self)
-        self.input_frame.grid(row=1, column=0, pady=15, padx=10, sticky="nsew")
+        self.input_frame.grid(row=1, column=0, pady=15, padx=10, sticky="nsew", rowspan=2)
 
         self.legend_frame = LegendFrame(self)
-        self.legend_frame.grid(row=1, column=1, sticky="sew", pady=15, padx=10)
+        self.legend_frame.grid(row=1, column=1, sticky="sew", pady=(15,0), padx=10)
+
+        self.shop_button = customtkinter.CTkButton(self, text="Go to shop", command=self.open_shop_gui)
+        self.shop_button.grid(row=2, column=1, sticky="sew", pady=15, padx=10)
+
+
     
     def update_tasks(self):
-            self.scrollable_frame = ScrollableFrame(self)
-            self.scrollable_frame.initialize_tasks()
-            self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
+        self.scrollable_frame = ScrollableFrame(self)
+        self.scrollable_frame.initialize_tasks()
+        self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
+    def open_shop_gui(self):
+        from shop.shop_gui import run_shop_gui
+        self.destroy()
+        run_shop_gui()
+    
 
 def run_tasks_gui():
     gui = GUI()
     gui.mainloop()
 
-if __name__ == "__main__":
-    run_tasks_gui()
+

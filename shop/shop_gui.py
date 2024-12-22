@@ -2,7 +2,8 @@ import customtkinter
 import os 
 import sys
 
-from shop_manager import add_to_currency, add_product, return_products, return_currency
+from shop.shop_manager import add_to_currency, add_product, return_products, return_currency
+from tasks.tasks_gui import run_tasks_gui
 
 class Product(customtkinter.CTkFrame):
     def __init__(self, master, product_name, price):
@@ -55,13 +56,12 @@ class MoneyFrame(customtkinter.CTkFrame):
         self.label = customtkinter.CTkLabel(self, text = "You have: ")
         self.money_amount = customtkinter.CTkLabel(self, text = f"${return_currency()}")
     
-        self.label.grid(row = 0, column = 0, padx = 10)
-        self.money_amount.grid(row = 1, column = 0, padx = 10)
+        self.label.grid(row = 0, column = 0, padx = (5,0))
+        self.money_amount.grid(row = 0, column = 1, padx = (0,5))
 
 
     def update_money_label(self):
-        self.money_amount = customtkinter.CTkLabel(self, text = f"${return_currency()}")
-        self.money_amount.grid(row = 1, column = 0, padx = 10)
+        self.money_amount.configure(text=f"${return_currency()}")
 
 class InputFrame(customtkinter.CTkFrame):
     def __init__(self, master):
@@ -100,7 +100,7 @@ class GUI(customtkinter.CTk):
         super().__init__()
 
         self.geometry("800x600")
-        self.title("Task manager")
+        self.title("Shop")
 
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -109,18 +109,26 @@ class GUI(customtkinter.CTk):
         self.update_products()
 
         self.input_frame = InputFrame(self)
-        self.input_frame.grid(row=1, column=0, pady=15, padx=10, sticky="nsew")
+        self.input_frame.grid(row=1, column=0, pady=15, padx=10, sticky="nsew", rowspan=2)
 
         self.money_frame = MoneyFrame(self)
-        self.money_frame.grid(row=1, column=1, sticky="sew", pady=15, padx=10)
+        self.money_frame.grid(row=1, column=1, sticky="sew", pady=(15, 0), padx=10)
+
+        self.tasks_button = customtkinter.CTkButton(self, text="Go to tasks", command=self.open_tasks_gui)
+        self.tasks_button.grid(row=2, column=1, sticky="sew", pady=(5, 15), padx=10)
     
     def update_products(self):
+            self.scrollable_frame.destroy()
             self.scrollable_frame = ScrollableFrame(self)
             self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
+    def open_tasks_gui(self):
+        from tasks.tasks_gui import run_tasks_gui
+        self.destroy()
+        run_tasks_gui()
 
 def run_shop_gui():
     gui = GUI()
     gui.mainloop()
+    return gui
 
-run_shop_gui()
