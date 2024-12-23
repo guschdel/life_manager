@@ -1,6 +1,4 @@
 import customtkinter 
-import os 
-import sys
 
 from shop.shop_manager import add_to_currency, add_product, return_products, return_currency
 from main_gui.main_gui import run_main_gui
