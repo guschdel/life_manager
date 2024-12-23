@@ -1,7 +1,10 @@
 {
     "currency": 0,
     "products": [
+        [],
         [
+            "Watch a movie",
+            60
         ]
     ]
 }

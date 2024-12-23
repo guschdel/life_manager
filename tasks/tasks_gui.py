@@ -1,7 +1,8 @@
 from datetime import date
 import customtkinter 
-from tasks.task_db_manager import return_tasks, create_new_task, delete_task
+import json
 
+from tasks.task_db_manager import return_tasks, create_new_task, delete_task
 from shop.shop_manager import add_to_currency
 from main_gui.main_gui import run_main_gui
 
@@ -38,6 +39,21 @@ class Task(customtkinter.CTkFrame):
         delete_task(self.objective, self.creation_date, self.limit_date, self.coin_reward)
         self.scrollable_frame.gui_window.update_tasks()
         add_to_currency(self.coin_reward)
+        self.add_to_task_complete_counter()
+
+    def add_to_task_complete_counter(self):
+        today = str(date.today())
+        with open(r"tasks\tasks_completed.json", "r") as file:
+            try:
+                data = json.load(file)
+            except:
+                data = {}
+            if today in data:
+                data[today] += 1
+            else:
+                data[today] = 1
+        with open(r"tasks\tasks_completed.json", "w") as file:
+            json.dump(data, file)
 
 class ScrollableFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master):

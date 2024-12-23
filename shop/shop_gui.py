@@ -43,11 +43,14 @@ class ScrollableFrame(customtkinter.CTkScrollableFrame):
             self.add_product(product, i)
 
     def add_product(self, product, row):
-        product_name = product[0]
-        price = product[1]
+        try:
+            product_name = product[0]
+            price = product[1]
 
-        new_product = Product(self, product_name, price)
-        new_product.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
+            new_product = Product(self, product_name, price)
+            new_product.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
+        except:
+            pass
 
 class MoneyFrame(customtkinter.CTkFrame):
     def __init__(self, master):
