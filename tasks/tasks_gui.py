@@ -1,6 +1,9 @@
 from datetime import date
 import customtkinter 
 import json
+import os
+
+from cv2 import FileNode_EMPTY
 
 from tasks.task_db_manager import return_tasks, create_new_task, delete_task
 from shop.shop_manager import add_to_currency
@@ -44,16 +47,23 @@ class Task(customtkinter.CTkFrame):
 
     def add_to_task_complete_counter(self):
         today = str(date.today())
-        with open(r"tasks\tasks_completed.json", "r") as file:
+        path_file = r"tasks\tasks_completed.json"
+        if not os.path.exists(path_file):
+            with open(path_file, "w") as file:
+                json.dump({}, file)
+
+        with open(path_file, "r") as file:
             try:
                 data = json.load(file)
-            except:
+            except FileNotFoundError:
+                data = {}
+            except json.JSONDecodeError:
                 data = {}
             if today in data:
                 data[today] += 1
             else:
                 data[today] = 1
-        with open(r"tasks\tasks_completed.json", "w") as file:
+        with open(path_file, "w") as file:
             json.dump(data, file)
 
 class ScrollableFrame(customtkinter.CTkScrollableFrame):
@@ -108,7 +118,7 @@ class InputFrame(customtkinter.CTkFrame):
             coin_reward = 0
         try:
             days = int(days)
-        except:
+        except ValueError:
             days = None
 
         if objective and days:

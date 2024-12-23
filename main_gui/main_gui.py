@@ -39,8 +39,11 @@ class MainGui(customtkinter.CTk):
         try:
             with open(file_path, "r") as file:
                 data = json.load(file)
-        except:
-            print("The file is empty/ not exists")
+        except json.JSONDecodeError:
+            print("The file is empty")
+            return
+        except FileNotFoundError:
+            print("The file does not exists yet")
             return
         
         dates = list(data.keys())

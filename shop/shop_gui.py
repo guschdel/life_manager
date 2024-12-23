@@ -5,7 +5,7 @@ from main_gui.main_gui import run_main_gui
 
 class Product(customtkinter.CTkFrame):
     def __init__(self, master, product_name, price):
-        super().__init__(master, border_color="#111184", border_width=2)
+        super().__init__(master, border_color="#92b6f0", border_width=2)
 
         self.scrollable_frame = master
         self.product_name = product_name
@@ -47,8 +47,11 @@ class ScrollableFrame(customtkinter.CTkScrollableFrame):
 
             new_product = Product(self, product_name, price)
             new_product.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
-        except:
-            pass
+            
+        except (TypeError, IndexError) as e:
+            print(f"Error: {e}. Invalid product structure: {product}")
+        except Exception as e:  
+            print(f"Unexpected error: {e}")
 
 class MoneyFrame(customtkinter.CTkFrame):
     def __init__(self, master):
@@ -88,7 +91,7 @@ class InputFrame(customtkinter.CTkFrame):
         price = self.price_input.get().strip()
         try:
             price = int(price)
-        except:
+        except ValueError:
             price = None
 
         if product and price:
