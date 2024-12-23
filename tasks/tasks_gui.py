@@ -23,17 +23,18 @@ class Task(customtkinter.CTkFrame):
 
         super().__init__(master, border_width=2, border_color=bordercolor)
 
-
         self.objective_label = customtkinter.CTkLabel(self, text=objective)
         self.creation_date_label = customtkinter.CTkLabel(self, text=f"Created on: {creation_date}")
         self.limit_date_label = customtkinter.CTkLabel(self, text=f"Limit: {limit_date}")
+        self.reward_label = customtkinter.CTkLabel(self, text=f"Reward: ${self.coin_reward}")
         self.complete_button = customtkinter.CTkButton(self, text="Complete task", 
                                                        command=self.delete_task_and_update)
 
         self.objective_label.grid(row=0, column=0, pady=(10,5), padx=10, sticky="w")
-        self.creation_date_label.grid(row=1, column=0, pady=(0,10), padx=10)
-        self.limit_date_label.grid(row=1, column=1, pady=(0,10), padx=10)
-        self.complete_button.grid(row=0, column=1, pady=(10,5), padx=10, sticky="w")
+        self.creation_date_label.grid(row=1, column=0, pady=(0,10), padx=10, sticky="w")
+        self.limit_date_label.grid(row=1, column=1, pady=(0,10), padx=10, sticky="w")
+        self.reward_label.grid(row=0, column=1, pady= (10,5), padx=10, sticky="w")
+        self.complete_button.grid(row=0, column=2, pady=10, padx=10, sticky="w", rowspan=2)
 
     def delete_task_and_update(self):
         delete_task(self.objective, self.creation_date, self.limit_date, self.coin_reward)
@@ -118,8 +119,6 @@ class LegendFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         
-        self.columnconfigure(1, weight=1)
-        self.columnconfigure(0, weight=1)
 
         self.red_square = customtkinter.CTkLabel(self, bg_color="#CC0000", text="      ")
         self.green_square = customtkinter.CTkLabel(self, bg_color="#6cff2c", text="      ")
@@ -127,8 +126,8 @@ class LegendFrame(customtkinter.CTkFrame):
         self.expired_label = customtkinter.CTkLabel(self, text="Expired", padx=5)
         self.on_going_label = customtkinter.CTkLabel(self, text="On going", padx=5)
         
-        self.red_square.grid(row=0, column=0, sticky="e")
-        self.green_square.grid(row=1, column=0, sticky="e")       
+        self.red_square.grid(row=0, column=0, sticky="w")
+        self.green_square.grid(row=1, column=0, sticky="w")       
 
         self.expired_label.grid(row=0, column=1, sticky="w")
         self.on_going_label.grid(row=1, column=1, sticky="w") 

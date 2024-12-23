@@ -39,20 +39,22 @@ class MainGui(customtkinter.CTk):
         try:
             with open(file_path, "r") as file:
                 data = json.load(file)
-        except FileNotFoundError:
-            print("The tasks_completed.json file does not exist.")
+        except:
+            print("The file is empty/ not exists")
             return
         
         dates = list(data.keys())
         counts = list(data.values())
 
-        fig = Figure(figsize=(7, 4), dpi=100)
+        fig = Figure(figsize=(6, 6), dpi=100)
         ax = fig.add_subplot(111)
         ax.bar(dates, counts, color='skyblue', edgecolor='black')
         ax.set_title("Tasks Completed Over Time", fontsize=16)
         ax.set_xlabel("Date", fontsize=14)
         ax.set_ylabel("Number of Tasks Completed", fontsize=14)
         ax.tick_params(axis='x', labelrotation=45)
+
+        fig.tight_layout()
 
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
         canvas.draw()
