@@ -7,14 +7,14 @@ from main_gui.main_gui import run_main_gui
 
 class Product(customtkinter.CTkFrame):
     def __init__(self, master, product_name, price):
-        super().__init__(master)
+        super().__init__(master, border_color="#111184", border_width=2)
 
         self.scrollable_frame = master
         self.product_name = product_name
         self.price = price
 
         self.product_name_label = customtkinter.CTkLabel(self, text=product_name)
-        self.price_label = customtkinter.CTkLabel(self, text=f"${price}")
+        self.price_label = customtkinter.CTkLabel(self, text=f"cost: ${price}")
         self.buy_button = customtkinter.CTkButton(self, text="Buy", command=self._buy_product)
 
         self.product_name_label.grid(row=0, column=0, pady=(10,5), padx=10, sticky="w")
