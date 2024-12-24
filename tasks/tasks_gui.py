@@ -3,8 +3,6 @@ import customtkinter
 import json
 import os
 
-from cv2 import FileNode_EMPTY
-
 from tasks.task_db_manager import return_tasks, create_new_task, delete_task
 from shop.shop_manager import add_to_currency
 from main_gui.main_gui import run_main_gui
