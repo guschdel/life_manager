@@ -4,8 +4,9 @@ from os import path
 import customtkinter as ctk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from tasks.tasks_gui import run_tasks_gui
-from shop.shop_gui import run_shop_gui
+from ..tasks.tasks_gui import run_tasks_gui
+from ..shop.shop_gui import run_shop_gui
+
 
 class MainGui(ctk.CTk):
     """The main GUI class"""
@@ -60,7 +61,8 @@ class MainGui(ctk.CTk):
     def plot_graph(self) -> None:
         """Plots the amount of tasks completed in the main window"""
         # file_path = r"tasks\tasks_completed.json"
-        file_path = path.join("tasks", "tasks_completed.json")
+        # current_dir = os.path.dirname(__file__)
+        file_path = path.join("src", "tasks", "tasks_completed.json")
         try:
             with open(file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)

@@ -1,5 +1,6 @@
 *.pyc
 *.pyo
+.pylintrc
 __pycache__/
 shop/*.json
 tasks/*.db

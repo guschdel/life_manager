@@ -3,8 +3,8 @@ from datetime import date
 import json
 import os
 import customtkinter as ctk
-from tasks.task_db_manager import return_tasks, create_new_task, delete_task, TaskElement
-from shop.shop_manager import add_to_currency
+from .task_db_manager import return_tasks, create_new_task, delete_task, TaskElement
+from ..shop.shop_manager import add_to_currency
 # from main_gui.main_gui import run_main_gui
 
 class Task(ctk.CTkFrame):
@@ -41,14 +41,15 @@ class Task(ctk.CTkFrame):
         """Deletes a task and updates the tasks completed"""
         delete_task(self.task)
         self.scrollable_frame.gui_window.update_tasks()
-        add_to_currency(self.coin_reward)
+        add_to_currency(self.task.coins)
         self.add_to_task_complete_counter()
 
     def add_to_task_complete_counter(self) -> None:
         """Adding another task to the counter"""
         today = str(date.today())
         # path_file = r"tasks\tasks_completed.json"
-        path_file = os.path.join("tasks", "tasks_completed.json")
+        current_dir = os.path.dirname(__file__)
+        path_file = os.path.join(current_dir, "tasks_completed.json")
         if not os.path.exists(path_file):
             with open(path_file, "w", encoding="utf-8") as file:
                 json.dump({}, file)
