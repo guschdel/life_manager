@@ -2,6 +2,6 @@
 *.pyo
 .pylintrc
 __pycache__/
-shop/*.json
-tasks/*.db
-tasks/*.json
+src/shop/*.json
+src/tasks/*.db
+src/tasks/*.json
