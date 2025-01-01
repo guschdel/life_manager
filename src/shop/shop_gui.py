@@ -1,10 +1,13 @@
 """the GUI for the shop-system with rewards"""
 import customtkinter as ctk
-from .shop_manager import add_to_currency, add_product, return_products, return_currency
+
+from .shop_manager import add_product, add_to_currency, return_currency, return_products
+
 # from main_gui.main_gui import run_main_gui
 
 class Product(ctk.CTkFrame):
     """represents a product to get as reward"""
+
     def __init__(self,
                  master,
                  product_name: str,
@@ -24,8 +27,9 @@ class Product(ctk.CTkFrame):
         self.buy_button.grid(row=0, column=1, pady=(10,5), padx=10, sticky="w", rowspan=2)
 
     def _buy_product(self) -> None:
-        """get a product of th shelve and remove
-        the amount of coins it costs"""
+        """Get a product of th shelve and remove
+        the amount of coins it costs
+        """
         currency = return_currency()
         if currency >= self.price:
             print("You bought one:", self.product_name)
@@ -36,6 +40,7 @@ class Product(ctk.CTkFrame):
 
 class ScrollableFrame(ctk.CTkScrollableFrame):
     """shows all products available"""
+
     def __init__(self, master) -> None:
         super().__init__(master)
         self.gui_window = master
@@ -43,13 +48,13 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         self.initialize_products()
 
     def initialize_products(self) -> None:
-        """get the products and add them to the screen"""
+        """Get the products and add them to the screen"""
         self.products = return_products()
         for i, product in enumerate(self.products):
             self.add_product(product, i)
 
     def add_product(self, product: list, row: int) -> None:
-        """adds a new product to the store"""
+        """Adds a new product to the store"""
         try:
             product_name = product[0]
             price = product[1]
@@ -63,6 +68,7 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
 
 class MoneyFrame(ctk.CTkFrame):
     """shows the money available"""
+
     def __init__(self, master):
         super().__init__(master)
 
@@ -73,12 +79,13 @@ class MoneyFrame(ctk.CTkFrame):
         self.money_amount.grid(row = 0, column = 1, padx = (0,5))
 
     def update_money_label(self):
-        """update the amount of money available"""
+        """Update the amount of money available"""
         self.money_amount.configure(text=f"${return_currency()}")
 
 
 class InputFrame(ctk.CTkFrame):
     """the input area to add a product"""
+
     def __init__(self, master) -> None:
         super().__init__(master)
         self.gui_window = master
@@ -98,7 +105,7 @@ class InputFrame(ctk.CTkFrame):
         self.input_button.grid(row=1, column=2, padx=(0,10))
 
     def create_product(self) -> None:
-        """create a new product and add it to the store"""
+        """Create a new product and add it to the store"""
         product = self.product_input.get().strip()
         price = self.price_input.get().strip()
         try:
@@ -113,6 +120,7 @@ class InputFrame(ctk.CTkFrame):
 
 class GUI(ctk.CTk):
     """create the window"""
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -135,19 +143,19 @@ class GUI(ctk.CTk):
         self.tasks_button.grid(row=2, column=1, sticky="sew", pady=(5, 15), padx=10)
 
     def update_products(self) -> None:
-        """update the products in the store"""
+        """Update the products in the store"""
         self.scrollable_frame.destroy()
         self.scrollable_frame = ScrollableFrame(self)
         self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
     def open_main_gui(self):
-        """return to the main screen of the application"""
+        """Return to the main screen of the application"""
         self.destroy()
         # run_main_gui()
 
 
 def run_shop_gui():
-    """show the window"""
+    """Show the window"""
     gui = GUI()
     gui.mainloop()
     return gui

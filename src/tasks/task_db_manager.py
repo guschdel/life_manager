@@ -1,11 +1,12 @@
 """handle the database connection and transactions"""
-import sqlite3
 import os
-from datetime import datetime, timedelta
+import sqlite3
 from dataclasses import dataclass
+from datetime import datetime, timedelta
+
 
 @dataclass
-class TaskElement(object):
+class TaskElement:
     objective: str
     creation_date: str
     time_limit: str
@@ -13,7 +14,7 @@ class TaskElement(object):
 
 
 def _start_database() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
-    """opens the database connection and returns the connection and cursor to it"""
+    """Opens the database connection and returns the connection and cursor to it"""
     current_dir = os.path.dirname(__file__)
     file_path = os.path.join(current_dir, 'data.db')
     conn = sqlite3.connect(file_path)
@@ -24,7 +25,7 @@ def _start_database() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     return conn, cursor
 
 def _create_table_if_not_exists(cursor):
-    """if we start with a plain database, we create one"""
+    """If we start with a plain database, we create one"""
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS tasks (
                 objective TEXT,
@@ -34,14 +35,14 @@ def _create_table_if_not_exists(cursor):
                 )""")
 
 def _create_new_task(task: TaskElement) -> None:
-    """insert a new task into the database"""
+    """Insert a new task into the database"""
     conn, cursor = _start_database()
     cursor.execute(f"INSERT INTO tasks VALUES(\"{task.objective}\", \"{task.creation_date}\", \"{task.time_limit}\", {task.coins})")
     conn.commit()
     conn.close()
 
 def return_tasks() -> list:
-    """get all tasks stored in the database"""
+    """Get all tasks stored in the database"""
     conn, cursor = _start_database()
 
     cursor.execute("SELECT * FROM tasks")
@@ -56,7 +57,7 @@ def return_tasks() -> list:
 def create_new_task(objective: str,
                     time_to_finish: str,
                     coin_reward: int) -> None:
-    """actually create the new task"""
+    """Actually create the new task"""
     now = datetime.now()
     limit_date = now + timedelta(days=time_to_finish)
 
@@ -67,7 +68,7 @@ def create_new_task(objective: str,
     _create_new_task(task)
 
 def delete_task(task: TaskElement) -> None:
-    """delete a task from the database"""
+    """Delete a task from the database"""
     conn, cursor = _start_database()
 
     cursor.execute("""DELETE FROM tasks WHERE

@@ -1,15 +1,18 @@
 """Creates the main GUI for the application"""
 import json
 from os import path
+
 import customtkinter as ctk
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from ..tasks.tasks_gui import run_tasks_gui
+from matplotlib.figure import Figure
+
 from ..shop.shop_gui import run_shop_gui
+from ..tasks.tasks_gui import run_tasks_gui
 
 
 class MainGui(ctk.CTk):
     """The main GUI class"""
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -64,7 +67,7 @@ class MainGui(ctk.CTk):
         # current_dir = os.path.dirname(__file__)
         file_path = path.join("src", "tasks", "tasks_completed.json")
         try:
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, encoding="utf-8") as file:
                 data = json.load(file)
         except json.JSONDecodeError:
             print("The file is empty")

@@ -1,23 +1,28 @@
 """Creates the GUI to handle the tasks"""
-from datetime import date
+
+
 import json
 import os
+from datetime import date
+
 import customtkinter as ctk
-from .task_db_manager import return_tasks, create_new_task, delete_task, TaskElement
+
 from ..shop.shop_manager import add_to_currency
+from .task_db_manager import TaskElement, create_new_task, delete_task, return_tasks
+
 # from main_gui.main_gui import run_main_gui
+
 
 class Task(ctk.CTkFrame):
     """representation of a single task"""
-    def __init__(self,
-                 master,
-                 task: TaskElement) -> None:
+
+    def __init__(self, master, task: TaskElement) -> None:
         self.task = task
         self.scrollable_frame = master
 
         today = date.today()
         limit_day, limit_month, limit_year = task.time_limit.split()[0].split("/")
-        if date(year = int(limit_year), month = int(limit_month), day = int(limit_day)) <  today:
+        if date(year=int(limit_year), month=int(limit_month), day=int(limit_day)) < today:
             bordercolor = "#CC0000"
         else:
             bordercolor = "#6cff2c"
@@ -28,13 +33,12 @@ class Task(ctk.CTkFrame):
         self.creation_date_label = ctk.CTkLabel(self, text=f"Created on: {self.task.creation_date}")
         self.limit_date_label = ctk.CTkLabel(self, text=f"Limit: {self.task.time_limit}")
         self.reward_label = ctk.CTkLabel(self, text=f"Reward: ${self.task.coins}")
-        self.complete_button = ctk.CTkButton(self, text="Complete task",
-                                                       command=self.delete_task_and_update)
+        self.complete_button = ctk.CTkButton(self, text="Complete task", command=self.delete_task_and_update)
 
-        self.objective_label.grid(row=0, column=0, pady=(10,5), padx=10, sticky="w")
-        self.creation_date_label.grid(row=1, column=0, pady=(0,10), padx=10, sticky="w")
-        self.limit_date_label.grid(row=1, column=1, pady=(0,10), padx=10, sticky="w")
-        self.reward_label.grid(row=0, column=1, pady= (10,5), padx=10, sticky="w")
+        self.objective_label.grid(row=0, column=0, pady=(10, 5), padx=10, sticky="w")
+        self.creation_date_label.grid(row=1, column=0, pady=(0, 10), padx=10, sticky="w")
+        self.limit_date_label.grid(row=1, column=1, pady=(0, 10), padx=10, sticky="w")
+        self.reward_label.grid(row=0, column=1, pady=(10, 5), padx=10, sticky="w")
         self.complete_button.grid(row=0, column=2, pady=10, padx=10, sticky="w", rowspan=2)
 
     def delete_task_and_update(self) -> None:
@@ -54,7 +58,7 @@ class Task(ctk.CTkFrame):
             with open(path_file, "w", encoding="utf-8") as file:
                 json.dump({}, file)
 
-        with open(path_file, "r", encoding="utf-8") as file:
+        with open(path_file, encoding="utf-8") as file:
             try:
                 data = json.load(file)
             except FileNotFoundError:
@@ -68,8 +72,10 @@ class Task(ctk.CTkFrame):
         with open(path_file, "w", encoding="utf-8") as file:
             json.dump(data, file)
 
+
 class ScrollableFrame(ctk.CTkScrollableFrame):
     """Frame that holds all the active tasks"""
+
     def __init__(self, master) -> None:
         super().__init__(master)
         self.gui_window = master
@@ -82,16 +88,14 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
             self.add_task(task, i)
 
     def add_task(self, task: TaskElement, row: int) -> None:
-        """add a new tasks to the list?"""
+        """Add a new tasks to the list?"""
         new_task = Task(self, task)
-        new_task.grid(row=row,
-                      column=0,
-                      sticky="ew",
-                      padx=5,
-                      pady=5)
+        new_task.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
+
 
 class InputFrame(ctk.CTkFrame):
-    """Frame to input new tasks """
+    """Frame to input new tasks"""
+
     def __init__(self, master):
         super().__init__(master)
         self.gui_window = master
@@ -106,16 +110,16 @@ class InputFrame(ctk.CTkFrame):
         self.coin_reward_input = ctk.CTkEntry(self)
         self.input_button = ctk.CTkButton(self, text="Create task", command=self.input_task)
 
-        self.objective_label.grid(row=0, column=0, padx=(10,0), sticky="w")
-        self.days_label.grid(row=1, column=0, padx=(10,0), sticky="w")
-        self.coin_reward_label.grid(row=2, column=0, padx=(10,0), sticky="w")
-        self.objective_input.grid(row=0, column=1, sticky="ew", padx = 10)
-        self.days_input.grid(row=1, column=1, sticky="ew", padx = 10)
-        self.coin_reward_input.grid(row=2, column=1, sticky="ew", padx = 10)
-        self.input_button.grid(row=1, column=2, padx=(0,10), rowspan=3)
+        self.objective_label.grid(row=0, column=0, padx=(10, 0), sticky="w")
+        self.days_label.grid(row=1, column=0, padx=(10, 0), sticky="w")
+        self.coin_reward_label.grid(row=2, column=0, padx=(10, 0), sticky="w")
+        self.objective_input.grid(row=0, column=1, sticky="ew", padx=10)
+        self.days_input.grid(row=1, column=1, sticky="ew", padx=10)
+        self.coin_reward_input.grid(row=2, column=1, sticky="ew", padx=10)
+        self.input_button.grid(row=1, column=2, padx=(0, 10), rowspan=3)
 
     def input_task(self):
-        """callback function to insert the specified task"""
+        """Callback function to insert the specified task"""
         objective = self.objective_input.get().strip()
         days = self.days_input.get().strip()
         coin_reward = self.coin_reward_input.get().strip()
@@ -131,8 +135,10 @@ class InputFrame(ctk.CTkFrame):
             create_new_task(objective, days, coin_reward)
             self.gui_window.update_tasks()
 
+
 class LegendFrame(ctk.CTkFrame):
-    """represents the legend in the lower right corner"""
+    """Represents the legend in the lower right corner"""
+
     def __init__(self, master) -> None:
         super().__init__(master)
 
@@ -148,8 +154,10 @@ class LegendFrame(ctk.CTkFrame):
         self.expired_label.grid(row=0, column=1, sticky="w")
         self.on_going_label.grid(row=1, column=1, sticky="w")
 
+
 class GUI(ctk.CTk):
     """the main window for the tasks"""
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -166,24 +174,24 @@ class GUI(ctk.CTk):
         self.input_frame.grid(row=1, column=0, pady=15, padx=10, sticky="nsew", rowspan=2)
 
         self.legend_frame = LegendFrame(self)
-        self.legend_frame.grid(row=1, column=1, sticky="sew", pady=(15,0), padx=10)
+        self.legend_frame.grid(row=1, column=1, sticky="sew", pady=(15, 0), padx=10)
 
         self.shop_button = ctk.CTkButton(self, text="Go back", command=self.open_main_gui)
         self.shop_button.grid(row=2, column=1, sticky="sew", pady=15, padx=10)
 
     def update_tasks(self) -> None:
-        """updates the list of tasks"""
+        """Updates the list of tasks"""
         self.scrollable_frame = ScrollableFrame(self)
         self.scrollable_frame.initialize_tasks()
         self.scrollable_frame.grid(row=0, column=0, sticky="nsew", columnspan=2)
 
     def open_main_gui(self) -> None:
-        """returns to the main window"""
+        """Returns to the main window"""
         self.destroy()
         # run_main_gui()
 
 
 def run_tasks_gui():
-    """shows the tasks window"""
+    """Shows the tasks window"""
     gui = GUI()
     gui.mainloop()
